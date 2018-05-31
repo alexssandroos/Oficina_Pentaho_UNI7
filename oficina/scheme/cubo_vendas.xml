@@ -1,0 +1,72 @@
+<Schema name="BI">
+  <Dimension type="TimeDimension" visible="true" highCardinality="false" name="Tempo">
+    <Hierarchy visible="true" hasAll="true" primaryKey="tem_id">
+      <Table name="dim_tempo" schema="public">
+      </Table>
+      <Level name="Ano" visible="true" column="tem_num_ano" type="String" uniqueMembers="false" levelType="TimeYears" hideMemberIf="Never">
+      </Level>
+      <Level name="Mes" visible="true" column="tem_num_mes" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never">
+      </Level>
+      <Level name="Dia" visible="true" column="tem_num_dia" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never">
+      </Level>
+      <Level name="Data" visible="true" column="tem_dat" type="String" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Geografia">
+    <Hierarchy visible="true" hasAll="true" primaryKey="geo_cep">
+      <Table name="dim_geografia" schema="public">
+      </Table>
+      <Level name="UF" visible="true" column="geo_uf" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Cidade" visible="true" column="geo_cidade" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Bairro" visible="true" column="geo_bairro" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Produto">
+    <Hierarchy visible="true" hasAll="true" primaryKey="itm_item">
+      <Table name="dim_produto" schema="public">
+      </Table>
+      <Level name="Grupo Produto" visible="true" column="grp_dscgrp" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Subgrupo Produto" visible="true" column="sgr_dscsgr" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Produto" visible="true" column="itm_descri" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" highCardinality="false" name="Pessoa">
+    <Hierarchy visible="true" hasAll="true">
+      <Table name="dim_pessoa" schema="public">
+      </Table>
+      <Level name="Tipo" visible="true" column="pes_tip" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+      <Level name="Descricao " visible="true" column="pes_nom" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="VENDAS" visible="true" cache="true" enabled="true">
+    <Table name="fato_vendas" schema="public">
+    </Table>
+    <DimensionUsage source="Pessoa" name="Vendedor" caption="Vendedor" visible="true" foreignKey="ven_sk" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Pessoa" name="Cliente" caption="Cliente" visible="true" foreignKey="cli_sk" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Produto" name="Produto" visible="true" foreignKey="itm_sk" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Tempo" name="Tempo" visible="true" foreignKey="tem_sk" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Geografia" name="Geografia Loja" caption="Geografia Loja" visible="true" foreignKey="geo_loja_sk" highCardinality="false">
+    </DimensionUsage>
+    <DimensionUsage source="Geografia" name="Geografia Cliente" caption="Geografia Cliente" visible="true" foreignKey="geo_cli_sk" highCardinality="false">
+    </DimensionUsage>
+    <Measure name="Quantidade" column="ift_quantfatc" datatype="Numeric" formatString="Standard" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="Lucro" column="lucro_item" datatype="Numeric" formatString="Currency" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="Valor Venda" column="custo_total" datatype="Numeric" formatString="Currency" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
